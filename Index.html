@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DexChad — Web3 Community & Content Strategist</title>
+<meta name="description" content="DexChad helps Web3 founders fix clarity, grow communities, and create content that converts across DeFi, GameFi, Metaverse and Blockchain.">
+<meta name="author" content="DexChad">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="DexChad — Web3 Community & Content Strategist">
+<meta property="og:description" content="Your Web3 project isn't failing. It's just not understood yet.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@Dexchad_">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"DexChad","url":"https://x.com/Dexchad_","sameAs":["https://x.com/Dexchad_","https://t.me/Dexchad"],"jobTitle":"Web3 Community Manager and Content Strategist"}</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0b0d'/%3E%3Ctext x='50%25' y='50%25' font-family='Georgia%2C serif' font-size='19' font-weight='700' fill='%23D4AF37' text-anchor='middle' dominant-baseline='central'%3ED%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b0d;
+  --surface: #111114;
+  --card: rgba(255,255,255,0.035);
+  --gold: #D4AF37;
+  --gold-2: #F0D475;
+  --gold-dim: rgba(212,175,55,0.1);
+  --gold-line: rgba(212,175,55,0.18);
+  --gold-line-s: rgba(212,175,55,0.36);
+  --white: #F7F4EE;
+  --muted: #B8B0A4;
+  --soft: #7A7268;
+  --max: 1140px;
+  --r: 20px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--white);font-family:'Outfit',sans-serif;font-weight:300;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.c{width:min(var(--max),calc(100% - 48px));margin:0 auto;}
+.s{padding:80px 0;}
+
+.serif{font-family:'DM Serif Display',Georgia,serif;line-height:1.05;letter-spacing:-.02em;}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border:1px solid var(--gold-line);border-radius:99px;color:var(--gold-2);background:rgba(212,175,55,0.06);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;}
+.eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(212,175,55,.5);}
+
+.card{background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.07);border-top-color:var(--gold-line);border-radius:var(--r);overflow:hidden;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 22px;border-radius:99px;font-family:'Outfit',sans-serif;font-weight:500;font-size:14px;border:1px solid transparent;transition:transform .2s,box-shadow .2s,opacity .2s;white-space:nowrap;cursor:pointer;}
+.btn svg{width:13px;height:13px;flex-shrink:0;}
+.btn-gold{background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#16130b;box-shadow:0 12px 28px rgba(212,175,55,.2);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(212,175,55,.28);}
+.btn-ghost{color:var(--white);border-color:var(--gold-line);background:rgba(255,255,255,.03);}
+.btn-ghost:hover{border-color:var(--gold-line-s);background:rgba(255,255,255,.05);}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(11,11,13,.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.05);}
+.nav-inner{height:66px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(145deg,var(--gold-2),#a07012);display:grid;place-items:center;font-family:'DM Serif Display',serif;font-size:17px;color:#14110a;box-shadow:0 6px 16px rgba(212,175,55,.2);}
+.brand-name{font-size:16px;font-weight:600;letter-spacing:-.01em;color:var(--white);}
+.brand-name b{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:6px;}
+.nav-link{padding:8px 13px;border-radius:99px;color:var(--muted);font-size:13px;font-weight:400;transition:color .2s,background .2s;cursor:pointer;}
+.nav-link:hover{color:var(--white);background:rgba(255,255,255,.04);}
+.nav-mob{display:none;align-items:center;gap:8px;}
+
+/* HERO */
+.hero{padding:52px 0 36px;}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:stretch;}
+
+.hero-main{padding:40px;min-height:560px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+.hero-main::after{content:'';position:absolute;bottom:-80px;right:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,.13),transparent 70%);pointer-events:none;}
+
+/* Animated headline */
+.hero-h1{margin:18px 0 18px;display:flex;flex-direction:column;gap:.06em;}
+.hl{display:block;opacity:0;transform:translateY(16px);animation:hlup .65s ease forwards;}
+.hl-sm{font-size:clamp(24px,3.8vw,46px);color:var(--muted);}
+.hl-md{font-size:clamp(32px,5.2vw,62px);color:var(--white);}
+.hl-lg{font-size:clamp(50px,8.5vw,100px);color:var(--gold);font-style:italic;line-height:.9;}
+.hl.d1{animation-delay:.12s;}
+.hl.d2{animation-delay:.3s;}
+.hl.d3{animation-delay:.5s;}
+@keyframes hlup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-sub{font-size:clamp(14px,1.7vw,16px);color:var(--muted);max-width:40ch;margin-bottom:26px;font-weight:300;}
+.hero-btns{display:flex;gap:11px;flex-wrap:wrap;}
+
+.stats-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px;}
+.stat-box{padding:14px 16px;border-radius:13px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);}
+.stat-n{font-family:'DM Serif Display',serif;font-size:30px;color:var(--gold);line-height:1;margin-bottom:4px;}
+.stat-l{font-size:11.5px;color:var(--soft);font-weight:400;}
+
+/* Hero sidebar */
+.hero-side{display:grid;gap:14px;}
+.h-panel{padding:24px;}
+.h-tag{margin-bottom:12px;}
+.h-title{font-size:14.5px;font-weight:600;color:var(--white);margin-top:10px;margin-bottom:14px;line-height:1.4;}
+.prob-rows{display:grid;gap:9px;}
+.prob-row{display:grid;grid-template-columns:38px 1fr;gap:11px;align-items:start;padding:12px;border-radius:13px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);transition:border-color .2s;}
+.prob-row:hover{border-color:var(--gold-line);}
+.prob-icon{width:38px;height:38px;border-radius:10px;background:var(--gold-dim);border:1px solid var(--gold-line);display:grid;place-items:center;font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold-2);}
+.prob-title{font-size:13px;font-weight:500;color:var(--white);margin-bottom:3px;}
+.prob-desc{font-size:11.5px;color:var(--soft);line-height:1.5;}
+
+.truth-box{padding:20px 22px;}
+.truth-box p{font-size:13.5px;color:var(--muted);line-height:1.65;margin:10px 0 16px;}
+
+/* SERVICES */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.svc-card{padding:26px;transition:border-color .2s,transform .2s;}
+.svc-card:hover{border-color:var(--gold-line-s);transform:translateY(-3px);}
+.svc-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(160deg,var(--gold-2),var(--gold));display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:#14110a;margin-bottom:14px;}
+.svc-title{font-family:'DM Serif Display',serif;font-size:19px;color:var(--white);margin-bottom:6px;}
+.svc-desc{font-size:13.5px;color:var(--muted);line-height:1.65;}
+
+/* PROCESS + OFFER */
+.po-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:start;}
+.po-box{padding:30px;}
+.po-title{font-size:clamp(20px,2.5vw,26px);color:var(--white);margin:12px 0 20px;}
+.steps{display:grid;gap:10px;}
+.step{display:grid;grid-template-columns:38px 1fr;gap:11px;align-items:start;padding:13px;border-radius:13px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);}
+.step-n{width:38px;height:38px;border-radius:9px;background:var(--gold-dim);color:var(--gold);display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;}
+.step b{display:block;font-size:13.5px;font-weight:500;color:var(--white);margin-bottom:2px;}
+.step span{font-size:12.5px;color:var(--soft);}
+.offer-box{padding:30px;}
+.offer-title{font-size:clamp(20px,2.5vw,26px);color:var(--white);margin:12px 0 10px;}
+.offer-desc{font-size:13.5px;color:var(--muted);margin-bottom:18px;line-height:1.65;}
+.offer-quote{padding:16px 18px;border-radius:13px;background:var(--gold-dim);border:1px solid var(--gold-line);font-size:13.5px;font-style:italic;color:var(--white);line-height:1.65;margin-bottom:20px;}
+.offer-note{font-size:12px;color:var(--soft);margin-top:12px;}
+
+/* PROOF + ABOUT merged */
+.pa-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;}
+.proof-box{padding:28px;}
+.proof-tag{display:inline-block;padding:4px 10px;border-radius:99px;background:var(--gold-dim);color:var(--gold-2);font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+.proof-name{font-family:'DM Serif Display',serif;font-size:22px;color:var(--white);margin-bottom:8px;}
+.proof-desc{font-size:13.5px;color:var(--muted);margin-bottom:16px;line-height:1.65;}
+.proof-list{list-style:none;display:grid;gap:8px;}
+.proof-list li{font-size:13px;color:var(--soft);padding-left:14px;position:relative;}
+.proof-list li::before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--gold);}
+.proof-link{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:var(--gold);opacity:.7;transition:opacity .2s;margin-top:16px;}
+.proof-link:hover{opacity:1;}
+
+.about-box{padding:28px;padding-top:24px;display:flex;flex-direction:column;gap:0;}
+.about-kicker{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);margin-bottom:10px;}
+.about-title{font-size:clamp(18px,2.2vw,23px);color:var(--white);margin:12px 0 12px;}
+.about-p{font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+.creds{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.cred{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);font-size:12.5px;color:var(--muted);transition:border-color .2s;}
+.cred:hover{border-color:var(--gold-line);}
+.cred-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px;}
+.cred strong{color:var(--white);font-weight:500;display:block;margin-bottom:1px;font-size:12.5px;}
+.pills-sm{display:flex;flex-wrap:wrap;gap:7px;}
+.pill{padding:6px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);color:var(--muted);font-size:12px;font-weight:400;transition:border-color .2s,color .2s;}
+.pill:hover{border-color:var(--gold-line);color:var(--gold-2);}
+.skills-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);margin-bottom:10px;}
+
+/* CTA */
+.cta-wrap{padding:52px;text-align:center;position:relative;overflow:hidden;}
+.cta-wrap::before{content:'';position:absolute;width:500px;height:220px;border-radius:50%;background:radial-gradient(ellipse,rgba(212,175,55,.09) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.cta-eye{margin-bottom:14px;position:relative;}
+.cta-h{font-size:clamp(28px,4.5vw,52px);color:var(--white);margin:0 0 12px;position:relative;}
+.cta-h em{color:var(--gold);}
+.cta-p{font-size:15px;color:var(--muted);max-width:38ch;margin:0 auto 32px;line-height:1.65;position:relative;}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;}
+
+/* FOOTER */
+footer{padding:24px 0 44px;}
+.foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06);}
+.foot-copy{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;color:var(--soft);}
+.foot-links{display:flex;gap:7px;}
+.foot-link{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;color:var(--soft);text-decoration:none;padding:5px 11px;border:1px solid rgba(255,255,255,.06);border-radius:99px;transition:color .2s,border-color .2s;}
+.foot-link:hover{color:var(--gold-2);border-color:var(--gold-line);}
+.foot-link svg{width:11px;height:11px;}
+
+/* MOBILE STICKY */
+.mob-sticky{display:none;position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(11,11,13,.96);backdrop-filter:blur(16px);border-top:1px solid var(--gold-line);padding:11px 20px;align-items:center;justify-content:space-between;gap:10px;}
+.mob-sticky-text{font-size:11.5px;color:var(--soft);}
+.mob-sticky-text b{display:block;font-size:13px;font-weight:500;color:var(--white);}
+.mob-sticky-btn{display:flex;align-items:center;gap:6px;background:linear-gradient(180deg,var(--gold-2),var(--gold));color:#14110a;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:.06em;padding:9px 16px;border-radius:99px;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+.mob-sticky-btn svg{width:11px;height:11px;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* SECTION IDs offset */
+section[id]{scroll-margin-top:80px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero-grid,.po-grid,.pa-grid{grid-template-columns:1fr;}
+  .hero-main{min-height:auto;}
+  .svc-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  nav .nav-links{display:none;}
+  .nav-mob{display:flex;}
+  .c{width:min(var(--max),calc(100% - 28px));}
+  .s{padding:60px 0;}
+  .hero{padding:36px 0 24px;}
+  .hero-main,.h-panel,.truth-box,.svc-card,.po-box,.offer-box,.proof-box,.about-box,.cta-wrap{padding:20px;}
+  .svc-grid{grid-template-columns:1fr;}
+  .stats-bar{grid-template-columns:1fr 1fr;}
+  .stats-bar .stat-box:last-child{grid-column:1/-1;}
+  .hero-btns{flex-direction:column;}
+  .hero-btns .btn,.cta-btns .btn{width:100%;justify-content:center;}
+  .cta-btns{flex-direction:column;align-items:center;}
+  .mob-sticky{display:flex;}
+  footer{padding-bottom:72px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="c nav-inner">
+    <a href="#" class="brand">
+      <div class="brand-mark">D</div>
+      <span class="brand-name">Dex<b>Chad</b></span>
+    </a>
+    <div class="nav-links">
+      <span class="nav-link" onclick="goTo('services')">Services</span>
+      <span class="nav-link" onclick="goTo('proof')">Work</span>
+      <span class="nav-link" onclick="goTo('about')">About</span>
+      <a class="btn btn-ghost" href="https://t.me/Dexchad" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Telegram
+      </a>
+      <a class="btn btn-gold" href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+        Work With Me
+      </a>
+    </div>
+    <div class="nav-mob">
+      <a class="btn btn-gold" href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer" style="padding:9px 16px;font-size:12px">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+        Get in touch
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- 01 HERO -->
+<header class="hero">
+  <div class="c hero-grid">
+
+    <section class="hero-main card reveal">
+      <div>
+        <span class="eyebrow">Web3 Community &amp; Content</span>
+        <h1 class="serif hero-h1">
+          <span class="hl hl-sm d1">Most Web3 Projects</span>
+          <span class="hl hl-md d2">Die</span>
+          <span class="hl hl-lg d3">Silently.</span>
+        </h1>
+        <p class="hero-sub">Not from bad tech. From a message nobody understands. I fix that.</p>
+        <div class="hero-btns">
+          <a class="btn btn-gold" href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+            Get in Touch
+          </a>
+          <button class="btn btn-ghost" onclick="goTo('services')">Show Me the Fix →</button>
+        </div>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-box"><div class="stat-n">3+</div><div class="stat-l">Years in Web3</div></div>
+        <div class="stat-box"><div class="stat-n">10+</div><div class="stat-l">Projects supported</div></div>
+        <div class="stat-box"><div class="stat-n">3</div><div class="stat-l">Ecosystems covered</div></div>
+      </div>
+    </section>
+
+    <aside class="hero-side reveal">
+      <div class="h-panel card">
+        <span class="eyebrow h-tag">Sound familiar?</span>
+        <div class="h-title">You built something real. But the world hasn't noticed yet.</div>
+        <div class="prob-rows">
+          <div class="prob-row">
+            <div class="prob-icon">?</div>
+            <div>
+              <div class="prob-title">Your message isn't landing</div>
+              <div class="prob-desc">People visit, read once and disappear. Nobody asks questions. Nobody stays.</div>
+            </div>
+          </div>
+          <div class="prob-row">
+            <div class="prob-icon">?</div>
+            <div>
+              <div class="prob-title">Your community feels quiet</div>
+              <div class="prob-desc">Members joined but they're not engaging. The Discord feels empty even though you're posting.</div>
+            </div>
+          </div>
+          <div class="prob-row">
+            <div class="prob-icon">?</div>
+            <div>
+              <div class="prob-title">You're building but nothing's moving</div>
+              <div class="prob-desc">The team is working. The product is real. But traction feels stuck.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="truth-box card">
+        <span class="eyebrow">Here's the truth</span>
+        <p>This is not a product problem. It is a clarity problem — and it is exactly what I fix.</p>
+        <a class="btn btn-gold" href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer" style="width:100%;justify-content:center">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+          Let's Fix It
+        </a>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<main>
+
+<!-- 02 SERVICES -->
+<section class="s" id="services">
+  <div class="c">
+    <div class="section-head reveal" style="margin-bottom:28px">
+      <span class="eyebrow">Services</span>
+      <h2 class="serif" style="font-size:clamp(28px,4vw,46px);color:var(--white);margin:10px 0 0">Three ways to grow your project.</h2>
+    </div>
+    <div class="svc-grid reveal">
+      <article class="svc-card card">
+        <div class="svc-icon">C</div>
+        <div class="svc-title">Clarity &amp; Positioning</div>
+        <p class="svc-desc">I help you say what you do in a way normal people understand fast — before you write a single post.</p>
+      </article>
+      <article class="svc-card card">
+        <div class="svc-icon">T</div>
+        <div class="svc-title">Content That Converts</div>
+        <p class="svc-desc">Threads, articles and copy that build trust and move people closer to action.</p>
+      </article>
+      <article class="svc-card card">
+        <div class="svc-icon">G</div>
+        <div class="svc-title">Community Growth</div>
+        <p class="svc-desc">Active, engaged Discord and Telegram communities that make your project worth joining.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 03 PROCESS + OFFER -->
+<section class="s">
+  <div class="c po-grid">
+    <div class="po-box card reveal">
+      <span class="eyebrow">Process</span>
+      <div class="po-title serif">From scattered attention to focused traction.</div>
+      <div class="steps">
+        <div class="step"><div class="step-n">01</div><div><b>Audit the message</b><span>Where the story feels confusing, weak or too technical.</span></div></div>
+        <div class="step"><div class="step-n">02</div><div><b>Refine the positioning</b><span>Shape a clearer message your audience understands quickly.</span></div></div>
+        <div class="step"><div class="step-n">03</div><div><b>Build persuasive content</b><span>Turn the message into content and assets that create trust.</span></div></div>
+        <div class="step"><div class="step-n">04</div><div><b>Grow the community</b><span>Connect the message to real engagement and better traction.</span></div></div>
+      </div>
+    </div>
+    <div class="offer-box card reveal">
+      <span class="eyebrow">Offer</span>
+      <div class="offer-title serif">Web3 Growth Partner</div>
+      <p class="offer-desc">For founders and teams that want better positioning, stronger content, and a community that actually grows.</p>
+      <div class="offer-quote">"Your project does not need a new strategy. It needs a clearer story. Fix how you say it and the right people will finally hear it."</div>
+      <a class="btn btn-gold" href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer" style="width:100%;justify-content:center">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+        Discuss Your Project
+      </a>
+      <p class="offer-note">Best for early-stage projects, Web3 communities and founder-led brands that need clarity and traction.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 04 PROOF + ABOUT -->
+<section class="s" id="proof">
+  <div class="c">
+    <div class="reveal" style="margin-bottom:24px">
+      <span class="eyebrow">Work &amp; About</span>
+    </div>
+    <div class="pa-grid reveal">
+      <article class="proof-box card" id="about">
+        <span class="proof-tag">Co-Founder</span>
+        <div class="proof-name">Blockchain Club RSU</div>
+        <p class="proof-desc">Built to close the gap between campus and the blockchain industry. We train Web3 talents, help early-stage projects grow, and host IRL education events that put real builders in the same room.</p>
+        <ul class="proof-list">
+          <li>Web3 talent training and onboarding</li>
+          <li>IRL education events and meetups</li>
+          <li>Early-stage project growth support</li>
+          <li>Campus-to-ecosystem visibility</li>
+        </ul>
+        <a href="https://x.com/blockchainrsu_" target="_blank" rel="noopener noreferrer" class="proof-link">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:11px;height:11px"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+          @blockchainrsu_ ↗
+        </a>
+        <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--soft);margin-bottom:9px">Ecosystems</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="padding:5px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);font-size:12px;color:var(--muted)">Solana</span>
+            <span style="padding:5px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);font-size:12px;color:var(--muted)">BNB Chain</span>
+            <span style="padding:5px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);font-size:12px;color:var(--muted)">Ethereum</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="about-box card" id="about">
+        <div class="about-kicker">About</div>
+        <div class="about-title serif">Started on campus. Building for the world.</div>
+        <p class="about-p">Started building Web3 communities on campus. Now I help projects anywhere get the clarity, content and community they need to grow.</p>
+        <div class="creds">
+          <div class="cred">
+            <div class="cred-dot"></div>
+            <div><strong>Co-Founder — @blockchainrsu_</strong>Training Web3 talents and hosting IRL ecosystem events.</div>
+          </div>
+          <div class="cred">
+            <div class="cred-dot"></div>
+            <div><strong>Community Lead — @EnergySalvation</strong>The next generation of Web3 millionaires — Founders, Traders and Creators.</div>
+          </div>
+        </div>
+        <div class="skills-label">Core strengths</div>
+        <div class="pills-sm">
+          <span class="pill">Community</span>
+          <span class="pill">Content</span>
+          <span class="pill">Positioning</span>
+          <span class="pill">DeFi</span>
+          <span class="pill">Discord</span>
+          <span class="pill">Web3 Education</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 05 CTA -->
+<section class="s">
+  <div class="c">
+    <div class="cta-wrap card reveal">
+      <span class="eyebrow cta-eye">Let's work together</span>
+      <h2 class="serif cta-h">Your project deserves<br>to be <em>heard.</em></h2>
+      <p class="cta-p">Most founders say the same thing after reaching out — "I wish I'd done this sooner."</p>
+      <div class="cta-btns">
+        <a class="btn btn-gold" href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+          Message on X
+        </a>
+        <a class="btn btn-ghost" href="https://t.me/Dexchad" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          Telegram
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="c">
+    <div class="foot">
+      <a href="#" class="brand">
+        <div class="brand-mark">D</div>
+        <span class="brand-name">Dex<b>Chad</b></span>
+      </a>
+      <span class="foot-copy">© 2026 DexChad · Web3 Community &amp; Content</span>
+      <div class="foot-links">
+        <a href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer" class="foot-link">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+          @Dexchad_
+        </a>
+        <a href="https://t.me/Dexchad" target="_blank" rel="noopener noreferrer" class="foot-link">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+          @Dexchad
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="mob-sticky">
+  <div class="mob-sticky-text">
+    <b>Open to new projects</b>
+    Community &amp; Content
+  </div>
+  <a href="https://x.com/Dexchad_" target="_blank" rel="noopener noreferrer" class="mob-sticky-btn">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+    Get in touch
+  </a>
+</div>
+
+<script>
+function goTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+const obs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.08 }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
