@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DexChad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-faint: rgba(201,168,76,0.07);
+      --bg: #080808;
+      --line: rgba(255,255,255,0.08);
+      --text: #F0EDE6;
+      --muted: #4A4A46;
+      --sub: #8A8782;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.028;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .display {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 0.94;
+    }
+
+    .label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .gold { color: var(--gold); }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 64px;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.06em;
+    }
+    .logo em { color: var(--gold); font-style: normal; }
+
+    .nav-cta {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--sub);
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .nav-cta:hover { color: var(--text); border-color: var(--gold); }
+
+    /* HERO */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 64px 72px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .hero-tag-line {
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    .hero-h1 {
+      font-size: clamp(58px, 10vw, 136px);
+      margin-bottom: 52px;
+    }
+
+    .hero-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--sub);
+      max-width: 320px;
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: #000;
+      background: var(--gold);
+      padding: 13px 26px;
+      border-radius: 2px;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* WHO */
+    .who {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .who-l {
+      padding: 80px 64px;
+      border-right: 1px solid var(--line);
+    }
+
+    .who-r {
+      padding: 80px 64px;
+    }
+
+    .who-name {
+      font-size: clamp(38px, 5.5vw, 68px);
+      margin-bottom: 28px;
+    }
+
+    .who-bio {
+      font-size: 15px;
+      color: var(--sub);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 360px;
+    }
+
+    .affil {
+      list-style: none;
+    }
+    .affil li {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--sub);
+      font-weight: 300;
+    }
+    .affil li:last-child { border-bottom: none; padding-bottom: 0; }
+    .affil-role {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      min-width: 90px;
+      letter-spacing: 0.01em;
+    }
+
+    /* FOCUS */
+    .focus { border-bottom: 1px solid var(--line); }
+
+    .focus-hd {
+      padding: 72px 64px 0;
+    }
+    .focus-hd .label { display: block; margin-bottom: 24px; }
+    .focus-title { font-size: clamp(32px, 5vw, 56px); }
+
+    .focus-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 64px;
+    }
+
+    .focus-col {
+      padding: 56px 64px;
+      border-top: 1px solid var(--line);
+      transition: background 0.3s;
+    }
+    .focus-col:first-child { border-right: 1px solid var(--line); }
+    .focus-col:hover { background: var(--gold-faint); }
+
+    .focus-n {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.22em;
+      margin-bottom: 28px;
+    }
+
+    .focus-col h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(24px, 3.2vw, 38px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 22px;
+    }
+
+    .focus-col p {
+      font-size: 14px;
+      color: var(--sub);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 360px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 28px;
+    }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.22);
+      padding: 5px 11px;
+      border-radius: 2px;
+    }
+
+    /* SERVICES */
+    .services {
+      padding: 80px 64px;
+      border-bottom: 1px solid var(--line);
+    }
+    .services .label { display: block; margin-bottom: 56px; }
+
+    .svc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .svc {
+      padding: 40px 40px 40px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .svc:not(:last-child) { border-right: 1px solid var(--line); padding-right: 40px; }
+    .svc:not(:first-child) { padding-left: 40px; padding-right: 0; }
+
+    .svc-n {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.22em;
+      margin-bottom: 20px;
+    }
+
+    .svc h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .svc p {
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.75;
+      font-weight: 300;
+    }
+
+    /* CTA */
+    .cta {
+      padding: 120px 64px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cta .label { display: block; margin-bottom: 28px; }
+
+    .cta-h {
+      font-size: clamp(46px, 8.5vw, 108px);
+      margin-bottom: 44px;
+      max-width: 12ch;
+    }
+
+    .cta-desc {
+      font-size: 15px;
+      color: var(--sub);
+      font-weight: 300;
+      max-width: 360px;
+      margin-bottom: 44px;
+      line-height: 1.75;
+    }
+
+    /* FOOTER */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 64px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+
+    /* ANIMATIONS */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-tag  { animation: up 0.65s ease both; }
+    .hero-h1   { animation: up 0.65s 0.08s ease both; }
+    .hero-foot { animation: up 0.65s 0.18s ease both; }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      nav { padding: 22px 24px; }
+      .hero { padding: 0 24px 56px; }
+      .who { grid-template-columns: 1fr; }
+      .who-l { border-right: none; border-bottom: 1px solid var(--line); padding: 56px 24px; }
+      .who-r { padding: 56px 24px; }
+      .focus-hd { padding: 56px 24px 0; }
+      .focus-cols { grid-template-columns: 1fr; }
+      .focus-col:first-child { border-right: none; }
+      .focus-col { padding: 48px 24px; }
+      .services { padding: 60px 24px; }
+      .svc-grid { grid-template-columns: 1fr; }
+      .svc, .svc:not(:last-child), .svc:not(:first-child) {
+        padding: 32px 0;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .cta { padding: 80px 24px; }
+      footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">DEX<em>CHAD</em></div>
+  <a href="#contact" class="nav-cta">Work with me</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">
+    <div class="hero-tag-line"></div>
+    <span class="label" style="color: var(--gold); letter-spacing: 0.16em;">Web3 Grandmaster &amp; Capital Strategist</span>
+  </div>
+
+  <h1 class="display hero-h1">
+    Markets.<br>
+    Made <span class="gold">Simple.</span>
+  </h1>
+
+  <div class="hero-foot">
+    <p class="hero-desc">
+      I break down crypto markets and Web3 the way they should be —
+      clear, direct, and easy to act on.
+    </p>
+    <a href="#contact" class="btn">
+      Work With Me
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M3 8h10M9 4l4 4-4 4"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- WHO -->
+<div class="who" id="about">
+  <div class="who-l">
+    <h2 class="display who-name">Who is<br><span class="gold">DexChad?</span></h2>
+    <p class="who-bio">
+      I study crypto markets and Web3 every day. I find what matters,
+      cut out what doesn't, and give you a clear picture of what to do next.
+    </p>
+  </div>
+  <div class="who-r">
+    <span class="label" style="display:block; margin-bottom: 36px;">Roles</span>
+    <ul class="affil">
+      <li>
+        <span class="affil-role">Co-Founder</span>
+        <span>@blockchainrsu_</span>
+      </li>
+      <li>
+        <span class="affil-role">Co-Founder</span>
+        <span>@MetaReach_</span>
+      </li>
+      <li>
+        <span class="affil-role">Lead</span>
+        <span>@EnergySalvation</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOCUS -->
+<section class="focus" id="focus">
+  <div class="focus-hd">
+    <span class="label">What I Focus On</span>
+    <h2 class="display focus-title">
+      Two things.<br>
+      Done right.
+    </h2>
+  </div>
+
+  <div class="focus-cols">
+    <div class="focus-col">
+      <div class="focus-n">01</div>
+      <h3>Trading &<br>Market Analysis</h3>
+      <p>
+        I read charts and market data to see where prices are going.
+        I show you what the move is — before it happens.
+        Clean reads. No noise.
+      </p>
+      <div class="tags">
+        <span class="tag">Price Action</span>
+        <span class="tag">Chart Reading</span>
+        <span class="tag">Entry & Exit</span>
+        <span class="tag">Risk Control</span>
+        <span class="tag">Market Cycles</span>
+      </div>
+    </div>
+
+    <div class="focus-col">
+      <div class="focus-n">02</div>
+      <h3>Web3 Research<br>& Strategy</h3>
+      <p>
+        I go deep on crypto projects and blockchain trends.
+        I find what is worth your attention and where the
+        real opportunities are hiding.
+      </p>
+      <div class="tags">
+        <span class="tag">Project Research</span>
+        <span class="tag">On-Chain Data</span>
+        <span class="tag">Sector Trends</span>
+        <span class="tag">Alpha Sourcing</span>
+        <span class="tag">DeFi & NFTs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <span class="label">Work With Me</span>
+  <div class="svc-grid">
+    <div class="svc">
+      <div class="svc-n">01</div>
+      <h3>Market Breakdowns</h3>
+      <p>
+        Regular chart reads and market updates.
+        Know what is moving, why, and what to do.
+      </p>
+    </div>
+    <div class="svc">
+      <div class="svc-n">02</div>
+      <h3>Web3 Growth</h3>
+      <p>
+        I help crypto projects get the right people looking —
+        and turn that attention into real users.
+      </p>
+    </div>
+    <div class="svc">
+      <div class="svc-n">03</div>
+      <h3>1-on-1 Strategy</h3>
+      <p>
+        We sit down together. Look at your trades, your plan,
+        or your project — and build a clear way forward.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <span class="label">Ready to start</span>
+  <h2 class="display cta-h">
+    Let's work.<br>
+    <span class="gold">Simply.</span>
+  </h2>
+  <p class="cta-desc">
+    Want clearer market reads, smarter Web3 moves, or help growing your project?
+    Send a message. No long forms.
+  </p>
+  <a href="https://twitter.com/DexChad" target="_blank" class="btn">
+    Find Me on X
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M3 8h10M9 4l4 4-4 4"/>
+    </svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">DEX<em style="color:var(--gold); font-style:normal;">CHAD</em></div>
+  <p>Simplifying Markets &amp; Execution</p>
+  <span class="label">© 2025</span>
+</footer>
+
+</body>
+</html>
