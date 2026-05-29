@@ -1,551 +1,1006 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DexChad</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --gold: #C9A84C;
-      --gold-faint: rgba(201,168,76,0.07);
-      --bg: #080808;
-      --line: rgba(255,255,255,0.08);
-      --text: #F0EDE6;
-      --muted: #4A4A46;
-      --sub: #8A8782;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dexchad — Web3 Grandmaster & Capital Strategist</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#03050A;--s1:#070B12;--s2:#0A0F18;
+  --gold:#C9A96E;--g2:#E8C98A;--g3:#8A6830;
+  --gd:rgba(201,169,110,.12);--gd2:rgba(201,169,110,.06);--gd3:rgba(201,169,110,.2);
+  --w:#EDE8DE;--m:rgba(237,232,222,.48);--m2:rgba(237,232,222,.22);--m3:rgba(237,232,222,.1);
+  --br:rgba(201,169,110,.15);--br2:rgba(237,232,222,.07);
+  --serif:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'Space Mono',monospace;
+  --max:1280px;--gap:clamp(1.5rem,5vw,5rem);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--w);font-family:var(--body);overflow-x:hidden;line-height:1.65}
+body.no-cursor{cursor:none}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--g3)}
+img,svg{max-width:100%}
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+/* ── CURSOR ── */
+#cur{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .08s}
+#ring{position:fixed;width:36px;height:36px;border:1px solid rgba(201,169,110,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);mix-blend-mode:screen}
+@media(hover:none){#cur,#ring{display:none}}
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+/* ── CANVAS ── */
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.028;
-      pointer-events: none;
-      z-index: 999;
-    }
+/* ── NOISE ── */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='.028'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:1}
 
-    a { color: inherit; text-decoration: none; }
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:800;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1.25rem var(--gap);
+  background:rgba(3,5,10,.82);
+  backdrop-filter:blur(28px) saturate(160%);
+  border-bottom:1px solid var(--br);
+  transition:padding .4s;
+}
+nav.slim{padding:.9rem var(--gap)}
+.logo{font-family:var(--serif);font-size:1.05rem;font-weight:800;letter-spacing:.14em;text-decoration:none;color:var(--w);text-transform:uppercase;flex-shrink:0}
+.logo span{color:var(--gold)}
+.nav-menu{display:flex;gap:2rem;list-style:none;align-items:center}
+.nav-menu a{font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--m);text-decoration:none;transition:color .2s;position:relative;padding-bottom:3px;cursor:pointer}
+.nav-menu a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+.nav-menu a:hover,.nav-menu a.active{color:var(--gold)}
+.nav-menu a:hover::after,.nav-menu a.active::after{width:100%}
+.nav-cta{
+  font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  padding:.55rem 1.4rem;border:1px solid var(--br);color:var(--gold)!important;
+  background:var(--gd2);transition:background .25s,border-color .25s!important;
+  text-decoration:none;flex-shrink:0;
+}
+.nav-cta:hover{background:var(--gd)!important;border-color:var(--gold)!important}
+.nav-cta::after{display:none!important}
 
-    .display {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 0.94;
-    }
+/* Hamburger */
+.ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
+.ham span{display:block;width:22px;height:1px;background:var(--w);transition:transform .3s,opacity .3s}
+.ham.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0}
+.ham.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
-    .label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
+/* Mobile nav drawer */
+.nav-drawer{
+  display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(3,5,10,.97);z-index:700;
+  flex-direction:column;justify-content:center;align-items:center;gap:2.5rem;
+  backdrop-filter:blur(20px);
+}
+.nav-drawer.open{display:flex;animation:fadeIn .3s}
+.nav-drawer a{font-family:var(--serif);font-size:1.8rem;font-weight:700;color:var(--m);text-decoration:none;letter-spacing:.04em;cursor:pointer;transition:color .2s}
+.nav-drawer a:hover,.nav-drawer a.active{color:var(--gold)}
 
-    .gold { color: var(--gold); }
+/* ── PAGE SYSTEM ── */
+.page{display:none;min-height:100vh;position:relative;z-index:1}
+.page.active{display:block;animation:pageIn .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes pageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 30px 64px;
-    }
+/* ── COMMON LAYOUT ── */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gap)}
+.sec{padding:6rem var(--gap)}
+.sec-sm{padding:4rem var(--gap)}
+.sec-alt{background:var(--s1)}
 
-    .logo {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 16px;
-      letter-spacing: 0.06em;
-    }
-    .logo em { color: var(--gold); font-style: normal; }
+/* ── LABELS ── */
+.tag{display:inline-flex;align-items:center;gap:.65rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem}
+.tag::before{content:'';width:18px;height:1px;background:var(--gold)}
+.tag-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:glow 2s infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,.5)}60%{box-shadow:0 0 0 6px rgba(201,169,110,0)}}
 
-    .nav-cta {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: var(--sub);
-      border-bottom: 1px solid transparent;
-      padding-bottom: 2px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .nav-cta:hover { color: var(--text); border-color: var(--gold); }
+/* ── HEADINGS ── */
+h1.display{font-family:var(--serif);font-size:clamp(3.8rem,8vw,8.5rem);font-weight:800;line-height:.92;letter-spacing:-.03em}
+h2.display{font-family:var(--serif);font-size:clamp(2.6rem,5vw,5rem);font-weight:800;line-height:.94;letter-spacing:-.03em;margin-bottom:1rem}
+h3.card-title{font-family:var(--serif);font-size:1.25rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.6rem}
+.gold-text{display:inline-block;background:linear-gradient(120deg,var(--g3) 0%,var(--gold) 35%,var(--g2) 70%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:300%;animation:gshift 6s ease infinite}
+@keyframes gshift{0%,100%{background-position:0%}50%{background-position:100%}}
 
-    /* HERO */
-    .hero {
-      min-height: 100svh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 64px 72px;
-      border-bottom: 1px solid var(--line);
-    }
+/* ── GLOWING WORD ANIMATION ── */
+.glow-word{display:inline-block;animation:wordGlow 3s ease-in-out infinite}
+@keyframes wordGlow{0%,100%{text-shadow:0 0 20px rgba(201,169,110,0),0 0 40px rgba(201,169,110,0)}50%{text-shadow:0 0 20px rgba(201,169,110,.35),0 0 60px rgba(201,169,110,.15)}}
 
-    .hero-tag {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 36px;
-    }
-    .hero-tag-line {
-      width: 36px;
-      height: 1px;
-      background: var(--gold);
-      opacity: 0.6;
-      flex-shrink: 0;
-    }
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--serif);font-weight:700;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:transform .25s,opacity .25s;cursor:pointer;white-space:nowrap}
+.btn-gold{padding:.95rem 2rem;background:linear-gradient(135deg,var(--g3),var(--gold),var(--g2));color:var(--bg);position:relative;overflow:hidden}
+.btn-gold::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 20%,rgba(255,255,255,.18) 50%,transparent 80%);transform:translateX(-120%);transition:transform .55s}
+.btn-gold:hover::before{transform:translateX(120%)}
+.btn-gold:hover{transform:translateY(-2px);opacity:.92}
+.btn-ghost{padding:.95rem 2rem;border:1px solid var(--br2);color:var(--m);backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
 
-    .hero-h1 {
-      font-size: clamp(58px, 10vw, 136px);
-      margin-bottom: 52px;
-    }
+/* ── TICKER ── */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--br);border-bottom:1px solid var(--br);background:rgba(201,169,110,.03);padding:.65rem 0;position:relative;z-index:2}
+.ticker{display:flex;width:max-content;animation:tickr 32s linear infinite}
+.ti{display:flex;align-items:center;gap:.5rem;padding:0 2.25rem;font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;white-space:nowrap;border-right:1px solid var(--br2)}
+.tk{color:var(--m2)}.tv{color:var(--w)}.tu{color:#4ECCA3}.td{color:#E05555}
+@keyframes tickr{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-    .hero-foot {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 28px;
-    }
+/* ── REVEAL ANIMATIONS ── */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.rv.on{opacity:1;transform:translateY(0)}
+.rl{opacity:0;transform:translateX(-24px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.rl.on{opacity:1;transform:translateX(0)}
+.rr{opacity:0;transform:translateX(24px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.rr.on{opacity:1;transform:translateX(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
 
-    .hero-desc {
-      font-size: 15px;
-      color: var(--sub);
-      max-width: 320px;
-      line-height: 1.75;
-      font-weight: 300;
-    }
+/* ─────────────────────────────
+   HOME
+───────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;padding:10rem var(--gap) 5rem;
+  position:relative;overflow:hidden;
+}
+/* SVG hero vectors */
+.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      color: #000;
-      background: var(--gold);
-      padding: 13px 26px;
-      border-radius: 2px;
-      transition: opacity 0.2s, transform 0.2s;
-      white-space: nowrap;
-      text-transform: uppercase;
-    }
-    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.hero-inner{max-width:var(--max);margin:0 auto;width:100%;position:relative;z-index:2}
 
-    /* WHO */
-    .who {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-bottom: 1px solid var(--line);
-    }
+.hero-desc{font-size:1rem;font-weight:300;color:var(--m);max-width:500px;line-height:1.85;margin:1.75rem 0 2.5rem}
+.hero-desc strong{color:var(--w);font-weight:500}
 
-    .who-l {
-      padding: 80px 64px;
-      border-right: 1px solid var(--line);
-    }
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
 
-    .who-r {
-      padding: 80px 64px;
-    }
+/* Stat bar */
+.stat-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--br);background:rgba(255,255,255,.02);
+  backdrop-filter:blur(16px);margin-top:4rem;
+  max-width:var(--max);
+}
+.sc{padding:1.4rem 1.75rem;border-right:1px solid var(--br2);transition:background .3s}
+.sc:last-child{border-right:none}
+.sc:hover{background:var(--gd2)}
+.sn{font-family:var(--serif);font-size:2.2rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--g3),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.sl{font-size:.65rem;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--m2);margin-top:.35rem}
 
-    .who-name {
-      font-size: clamp(38px, 5.5vw, 68px);
-      margin-bottom: 28px;
-    }
+/* ── HOME: WHO I SERVE ── */
+.serve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--br2)}
+.sg{background:var(--bg);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:background .3s;cursor:default}
+.sg:hover{background:var(--s2)}
+.sg::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.sg:hover::after{transform:scaleX(1)}
+.sg-num{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:var(--gold);margin-bottom:1.25rem}
+.sg-desc{font-size:.85rem;font-weight:300;color:var(--m);line-height:1.8;margin:.6rem 0 1.25rem}
+.sg-list{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.sg-list li{font-size:.75rem;color:var(--m2);display:flex;align-items:flex-start;gap:.5rem;line-height:1.5}
+.sg-list li::before{content:'→';color:var(--gold);flex-shrink:0;font-size:.68rem;margin-top:.1rem}
 
-    .who-bio {
-      font-size: 15px;
-      color: var(--sub);
-      line-height: 1.8;
-      font-weight: 300;
-      max-width: 360px;
-    }
+/* ─────────────────────────────
+   ABOUT
+───────────────────────────── */
+.about-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:5vw;align-items:start;max-width:var(--max);margin:0 auto}
+.about-body{font-size:.92rem;font-weight:300;color:var(--m);line-height:1.9}
+.about-body p{margin-bottom:1.25rem}
+.about-body strong{color:var(--w);font-weight:500}
+.about-body .highlight{color:var(--gold);font-weight:500}
 
-    .affil {
-      list-style: none;
-    }
-    .affil li {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--line);
-      font-size: 13px;
-      color: var(--sub);
-      font-weight: 300;
-    }
-    .affil li:last-child { border-bottom: none; padding-bottom: 0; }
-    .affil-role {
-      font-family: 'Syne', sans-serif;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text);
-      min-width: 90px;
-      letter-spacing: 0.01em;
-    }
+/* Skills */
+.skills-wrap{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2rem}
+.skill-pill{font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .85rem;border:1px solid var(--br2);color:var(--m2);transition:border-color .2s,color .2s,background .2s}
+.skill-pill:hover{border-color:var(--gold);color:var(--gold);background:var(--gd2)}
 
-    /* FOCUS */
-    .focus { border-bottom: 1px solid var(--line); }
+/* Timeline */
+.timeline{position:relative;padding-left:2rem;margin-top:3rem}
+.timeline::before{content:'';position:absolute;left:0;top:.4rem;bottom:.4rem;width:1px;background:linear-gradient(to bottom,var(--gold),var(--br),transparent)}
+.tl{position:relative;padding-bottom:2.75rem}
+.tl:last-child{padding-bottom:0}
+.tl-dot{position:absolute;left:-2rem;top:.3rem;width:9px;height:9px;border:1px solid var(--gold);background:var(--bg);transform:translateX(-50%);display:flex;align-items:center;justify-content:center}
+.tl-dot::after{content:'';width:3px;height:3px;background:var(--gold);display:block}
+.tl-yr{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;color:var(--gold);margin-bottom:.35rem}
+.tl-title{font-family:var(--serif);font-size:1rem;font-weight:700;margin-bottom:.35rem}
+.tl-body{font-size:.82rem;font-weight:300;color:var(--m);line-height:1.75}
 
-    .focus-hd {
-      padding: 72px 64px 0;
-    }
-    .focus-hd .label { display: block; margin-bottom: 24px; }
-    .focus-title { font-size: clamp(32px, 5vw, 56px); }
+/* Thought cards */
+.thought-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--br2);margin-top:3rem}
+.tc{background:var(--s1);padding:2.25rem;position:relative;overflow:hidden;transition:background .3s}
+.tc:hover{background:var(--s2)}
+.tc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .5s}
+.tc:hover::before{transform:scaleX(1)}
+.tc-icon{font-size:1.3rem;margin-bottom:1rem;display:block;color:var(--gold);opacity:.7}
+.tc-title{font-family:var(--serif);font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.tc-body{font-size:.82rem;font-weight:300;color:var(--m);line-height:1.75}
 
-    .focus-cols {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      margin-top: 64px;
-    }
+/* ─────────────────────────────
+   SERVICES
+───────────────────────────── */
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--br)}
+.sv{background:var(--bg);padding:2.75rem;position:relative;overflow:hidden;transition:background .3s;cursor:default}
+.sv:hover{background:var(--s1)}
+.sv::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--gold),transparent);opacity:0;transition:opacity .35s}
+.sv:hover::before{opacity:1}
+.sv-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem}
+.sv-n{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;color:var(--gold)}
+.sv-for{font-size:.6rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .65rem;border:1px solid var(--br2);color:var(--m2)}
+.sv-title{font-family:var(--serif);font-size:1.4rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.75rem}
+.sv-desc{font-size:.85rem;font-weight:300;color:var(--m);line-height:1.82;margin-bottom:1.5rem}
+.sv-list{list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.5rem}
+.sv-list li{font-size:.76rem;color:var(--m2);display:flex;align-items:flex-start;gap:.55rem;line-height:1.55}
+.sv-list li::before{content:'→';color:var(--gold);flex-shrink:0;font-size:.68rem;margin-top:.08rem}
+.sv-outcome{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);padding:.28rem .75rem;border:1px solid rgba(201,169,110,.2);background:var(--gd2)}
+.sv-outcome::before{content:'✦'}
 
-    .focus-col {
-      padding: 56px 64px;
-      border-top: 1px solid var(--line);
-      transition: background 0.3s;
-    }
-    .focus-col:first-child { border-right: 1px solid var(--line); }
-    .focus-col:hover { background: var(--gold-faint); }
+/* Process */
+.process-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:3rem}
+.process-row::before{content:'';position:absolute;top:6px;left:12%;right:12%;height:1px;background:linear-gradient(to right,var(--gold),var(--br),var(--gold));opacity:.25;z-index:0}
+.ps{padding:0 1.25rem;text-align:center;position:relative;z-index:1}
+.ps-dot{width:13px;height:13px;border:1px solid var(--gold);background:var(--bg);margin:0 auto 1.25rem;display:flex;align-items:center;justify-content:center;transition:background .3s}
+.ps:hover .ps-dot{background:var(--gd)}
+.ps-dot::after{content:'';width:5px;height:5px;background:var(--gold);display:block}
+.ps-n{font-family:var(--mono);font-size:.56rem;letter-spacing:.14em;color:var(--gold);margin-bottom:.35rem}
+.ps-title{font-family:var(--serif);font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+.ps-desc{font-size:.75rem;font-weight:300;color:var(--m);line-height:1.65}
 
-    .focus-n {
-      font-family: 'Syne', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--gold);
-      letter-spacing: 0.22em;
-      margin-bottom: 28px;
-    }
+/* ─────────────────────────────
+   POW (PROOF OF WORK)
+───────────────────────────── */
+.pow-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--br)}
+.pg{background:var(--bg);padding:2.75rem;position:relative;overflow:hidden;transition:background .3s}
+.pg:hover{background:var(--s1)}
+.pg::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g3),var(--g2));transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.pg:hover::after{transform:scaleX(1)}
+.pg-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--m2);margin-bottom:.5rem}
+.pg-val{font-family:var(--serif);font-size:clamp(2.8rem,5vw,4.5rem);font-weight:800;line-height:1;letter-spacing:-.03em;background:linear-gradient(135deg,var(--g3),var(--gold),var(--g2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.65rem}
+.pg-desc{font-size:.85rem;font-weight:300;color:var(--m);line-height:1.8;max-width:380px}
+.pg-badge{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--gold);padding:.25rem .65rem;border:1px solid rgba(201,169,110,.2);background:var(--gd2);margin-top:.75rem}
+.pg-badge::before{content:'●';font-size:.5rem}
 
-    .focus-col h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(24px, 3.2vw, 38px);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.025em;
-      margin-bottom: 22px;
-    }
+/* ROI cards */
+.roi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem}
+.rc{border:1px solid var(--br2);padding:1.75rem;background:rgba(255,255,255,.015);backdrop-filter:blur(8px);transition:border-color .3s,transform .3s}
+.rc:hover{border-color:var(--br);transform:translateY(-4px)}
+.rc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
+.rc-asset{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;color:var(--m2)}
+.rc-pct{font-family:var(--serif);font-size:1.6rem;font-weight:800;color:#4ECCA3;line-height:1}
+.rc-name{font-size:.88rem;font-weight:600;letter-spacing:-.01em;margin-bottom:.35rem}
+.rc-call{font-size:.78rem;font-weight:300;color:var(--m);line-height:1.7}
+.rc-period{font-family:var(--mono);font-size:.58rem;color:var(--m2);margin-top:.75rem;letter-spacing:.06em}
 
-    .focus-col p {
-      font-size: 14px;
-      color: var(--sub);
-      line-height: 1.8;
-      font-weight: 300;
-      max-width: 360px;
-    }
+/* Milestones */
+.ml-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:3rem}
+.mc{border:1px solid var(--br2);padding:1.75rem 2rem;display:flex;gap:1.25rem;align-items:flex-start;transition:border-color .3s,background .3s}
+.mc:hover{border-color:var(--br);background:var(--gd2)}
+.mc-yr{font-family:var(--serif);font-size:2.2rem;font-weight:800;color:var(--gold);opacity:.3;line-height:1;flex-shrink:0;min-width:3.5rem}
+.mc-title{font-size:.88rem;font-weight:600;margin-bottom:.3rem;letter-spacing:-.01em}
+.mc-desc{font-size:.78rem;font-weight:300;color:var(--m);line-height:1.7}
 
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 28px;
-    }
+/* ─────────────────────────────
+   WORK WITH ME (MODAL)
+───────────────────────────── */
+.modal-overlay{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;background:rgba(3,5,10,.9);backdrop-filter:blur(20px)}
+.modal-overlay.open{display:flex;animation:fadeIn .3s}
+.modal{background:var(--s1);border:1px solid var(--br);padding:3rem;max-width:480px;width:90%;position:relative;text-align:center}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.modal-close{position:absolute;top:1rem;right:1.25rem;background:none;border:none;color:var(--m);font-size:1.25rem;cursor:pointer;transition:color .2s;font-family:var(--mono)}
+.modal-close:hover{color:var(--gold)}
+.modal h3{font-family:var(--serif);font-size:1.8rem;font-weight:800;margin-bottom:.5rem}
+.modal p{font-size:.88rem;color:var(--m);font-weight:300;line-height:1.8;margin-bottom:2rem}
+.contact-links{display:flex;flex-direction:column;gap:.75rem}
+.cl{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border:1px solid var(--br2);background:rgba(255,255,255,.02);text-decoration:none;color:var(--w);transition:border-color .25s,background .25s,transform .25s}
+.cl:hover{border-color:var(--gold);background:var(--gd);transform:translateX(4px)}
+.cl-l{display:flex;align-items:center;gap:.85rem}
+.cl-icon{width:34px;height:34px;border:1px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:.9rem;color:var(--gold);flex-shrink:0;transition:background .25s}
+.cl:hover .cl-icon{background:var(--gd)}
+.cl-name{font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.cl-handle{font-family:var(--mono);font-size:.65rem;color:var(--m);margin-top:.1rem}
+.cl-arr{color:var(--gold);font-size:.8rem;transition:transform .25s}
+.cl:hover .cl-arr{transform:translateX(4px)}
 
-    .tag {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.22);
-      padding: 5px 11px;
-      border-radius: 2px;
-    }
+/* ─────────────────────────────
+   CTA BLOCK
+───────────────────────────── */
+.cta-block{padding:8rem var(--gap);text-align:center;position:relative;overflow:hidden;border-top:1px solid var(--br2)}
+.cta-grid{position:absolute;inset:0;background-image:linear-gradient(var(--br2) 1px,transparent 1px),linear-gradient(90deg,var(--br2) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 75% 75% at 50% 50%,#000,transparent);pointer-events:none}
+.cta-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(201,169,110,.07) 0%,transparent 65%);pointer-events:none}
+.cta-block h2.display{position:relative;z-index:1;margin-bottom:.75rem}
+.cta-block p{font-size:.95rem;font-weight:300;color:var(--m);max-width:400px;margin:0 auto 2.75rem;line-height:1.85;position:relative;z-index:1}
+.cta-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
 
-    /* SERVICES */
-    .services {
-      padding: 80px 64px;
-      border-bottom: 1px solid var(--line);
-    }
-    .services .label { display: block; margin-bottom: 56px; }
+/* ── FOOTER ── */
+footer{padding:1.75rem var(--gap);border-top:1px solid var(--br2);display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;flex-wrap:wrap;gap:1rem}
+.ft-l{font-family:var(--mono);font-size:.58rem;color:var(--m2);letter-spacing:.08em}
+.ft-r{display:flex;gap:1.75rem;flex-wrap:wrap}
+.ft-r a{font-size:.62rem;color:var(--m2);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.ft-r a:hover{color:var(--gold)}
 
-    .svc-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-      border-top: 1px solid var(--line);
-    }
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  :root{--gap:1.5rem}
+  .nav-menu{display:none}
+  .ham{display:flex}
+  .serve-grid,.thought-row,.svc-grid,.pow-grid,.ml-grid,.roi-grid{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
+  .process-row{grid-template-columns:1fr 1fr;gap:2rem}
+  .process-row::before{display:none}
+  .stat-bar{grid-template-columns:repeat(2,1fr)}
+  .sc{border-bottom:1px solid var(--br2)}
+  .cta-block{padding:5rem var(--gap)}
+  footer{flex-direction:column;text-align:center}
+  .ft-r{justify-content:center}
+  h1.display{font-size:3.2rem}
+}
+@media(max-width:520px){
+  h1.display{font-size:2.8rem}
+  h2.display{font-size:2.2rem}
+  .hero{padding:8rem var(--gap) 4rem}
+  .sec{padding:4rem var(--gap)}
+  .stat-bar{grid-template-columns:1fr 1fr}
+  .hero-btns{flex-direction:column;align-items:flex-start}
+  .btn{width:100%;justify-content:center}
+  .modal{padding:2rem 1.5rem}
+}
 
-    .svc {
-      padding: 40px 40px 40px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .svc:not(:last-child) { border-right: 1px solid var(--line); padding-right: 40px; }
-    .svc:not(:first-child) { padding-left: 40px; padding-right: 0; }
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-    .svc-n {
-      font-family: 'Syne', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.22em;
-      margin-bottom: 20px;
-    }
-
-    .svc h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      letter-spacing: -0.01em;
-    }
-
-    .svc p {
-      font-size: 13px;
-      color: var(--sub);
-      line-height: 1.75;
-      font-weight: 300;
-    }
-
-    /* CTA */
-    .cta {
-      padding: 120px 64px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .cta .label { display: block; margin-bottom: 28px; }
-
-    .cta-h {
-      font-size: clamp(46px, 8.5vw, 108px);
-      margin-bottom: 44px;
-      max-width: 12ch;
-    }
-
-    .cta-desc {
-      font-size: 15px;
-      color: var(--sub);
-      font-weight: 300;
-      max-width: 360px;
-      margin-bottom: 44px;
-      line-height: 1.75;
-    }
-
-    /* FOOTER */
-    footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 28px 64px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    footer p { font-size: 12px; color: var(--muted); }
-
-    /* ANIMATIONS */
-    @keyframes up {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-tag  { animation: up 0.65s ease both; }
-    .hero-h1   { animation: up 0.65s 0.08s ease both; }
-    .hero-foot { animation: up 0.65s 0.18s ease both; }
-
-    /* RESPONSIVE */
-    @media (max-width: 860px) {
-      nav { padding: 22px 24px; }
-      .hero { padding: 0 24px 56px; }
-      .who { grid-template-columns: 1fr; }
-      .who-l { border-right: none; border-bottom: 1px solid var(--line); padding: 56px 24px; }
-      .who-r { padding: 56px 24px; }
-      .focus-hd { padding: 56px 24px 0; }
-      .focus-cols { grid-template-columns: 1fr; }
-      .focus-col:first-child { border-right: none; }
-      .focus-col { padding: 48px 24px; }
-      .services { padding: 60px 24px; }
-      .svc-grid { grid-template-columns: 1fr; }
-      .svc, .svc:not(:last-child), .svc:not(:first-child) {
-        padding: 32px 0;
-        border-right: none;
-        border-bottom: 1px solid var(--line);
-      }
-      .cta { padding: 80px 24px; }
-      footer { padding: 24px; flex-direction: column; align-items: flex-start; }
-    }
-  </style>
+/* ── SVG ANIMATIONS ── */
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@keyframes nodePulse{0%,100%{opacity:.35}50%{opacity:.9}}
+@keyframes hexP{0%,100%{opacity:.05}50%{opacity:.18}}
+@keyframes ringExp{0%{r:50;opacity:.1}100%{r:280;opacity:0}}
+@keyframes floatOrb{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,25px)}}
+</style>
 </head>
-<body>
+<body class="no-cursor">
+
+<canvas id="bgc"></canvas>
+<div id="cur"></div>
+<div id="ring"></div>
 
 <!-- NAV -->
-<nav>
-  <div class="logo">DEX<em>CHAD</em></div>
-  <a href="#contact" class="nav-cta">Work with me</a>
+<nav id="nav">
+  <a href="#" class="logo" onclick="go('home');return false">DEX<span>CHAD</span></a>
+  <ul class="nav-menu">
+    <li><a onclick="go('home')" data-p="home" class="active">Home</a></li>
+    <li><a onclick="go('about')" data-p="about">About</a></li>
+    <li><a onclick="go('services')" data-p="services">Services</a></li>
+    <li><a onclick="go('pow')" data-p="pow">Proof of Work</a></li>
+    <li><a class="nav-cta" onclick="openModal()">Work With Me</a></li>
+  </ul>
+  <button class="ham" id="ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-tag">
-    <div class="hero-tag-line"></div>
-    <span class="label" style="color: var(--gold); letter-spacing: 0.16em;">Web3 Grandmaster &amp; Capital Strategist</span>
-  </div>
+<!-- MOBILE DRAWER -->
+<nav class="nav-drawer" id="drawer">
+  <a onclick="go('home');closeDrawer()">Home</a>
+  <a onclick="go('about');closeDrawer()">About</a>
+  <a onclick="go('services');closeDrawer()">Services</a>
+  <a onclick="go('pow');closeDrawer()">Proof of Work</a>
+  <a onclick="openModal();closeDrawer()" style="color:var(--gold)">Work With Me</a>
+</nav>
 
-  <h1 class="display hero-h1">
-    Markets.<br>
-    Made <span class="gold">Simple.</span>
-  </h1>
-
-  <div class="hero-foot">
-    <p class="hero-desc">
-      I break down crypto markets and Web3 the way they should be —
-      clear, direct, and easy to act on.
-    </p>
-    <a href="#contact" class="btn">
-      Work With Me
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 8h10M9 4l4 4-4 4"/>
-      </svg>
-    </a>
-  </div>
-</section>
-
-<!-- WHO -->
-<div class="who" id="about">
-  <div class="who-l">
-    <h2 class="display who-name">Who is<br><span class="gold">DexChad?</span></h2>
-    <p class="who-bio">
-      I study crypto markets and Web3 every day. I find what matters,
-      cut out what doesn't, and give you a clear picture of what to do next.
-    </p>
-  </div>
-  <div class="who-r">
-    <span class="label" style="display:block; margin-bottom: 36px;">Roles</span>
-    <ul class="affil">
-      <li>
-        <span class="affil-role">Co-Founder</span>
-        <span>@blockchainrsu_</span>
-      </li>
-      <li>
-        <span class="affil-role">Co-Founder</span>
-        <span>@MetaReach_</span>
-      </li>
-      <li>
-        <span class="affil-role">Lead</span>
-        <span>@EnergySalvation</span>
-      </li>
-    </ul>
+<!-- WORK WITH ME MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="tag"><span class="tag-dot"></span>Get In Touch</div>
+    <h3>Let's <span class="gold-text">Connect.</span></h3>
+    <p>Choose how you'd like to reach out. Whether it's a quick DM, a collab proposal, or a consultation — I'm available on all three.</p>
+    <div class="contact-links">
+      <a href="https://x.com/dexchad_" target="_blank" class="cl">
+        <div class="cl-l">
+          <div class="cl-icon">𝕏</div>
+          <div><div class="cl-name">X / Twitter</div><div class="cl-handle">@dexchad_</div></div>
+        </div>
+        <span class="cl-arr">→</span>
+      </a>
+      <a href="https://t.me/only0dexchad" target="_blank" class="cl">
+        <div class="cl-l">
+          <div class="cl-icon">✈</div>
+          <div><div class="cl-name">Telegram</div><div class="cl-handle">t.me/only0dexchad</div></div>
+        </div>
+        <span class="cl-arr">→</span>
+      </a>
+      <a href="mailto:Dexchad24@gmail.com" class="cl">
+        <div class="cl-l">
+          <div class="cl-icon">✉</div>
+          <div><div class="cl-name">Email</div><div class="cl-handle">Dexchad24@gmail.com</div></div>
+        </div>
+        <span class="cl-arr">→</span>
+      </a>
+    </div>
   </div>
 </div>
 
-<!-- FOCUS -->
-<section class="focus" id="focus">
-  <div class="focus-hd">
-    <span class="label">What I Focus On</span>
-    <h2 class="display focus-title">
-      Two things.<br>
-      Done right.
-    </h2>
-  </div>
+<!-- ══════════ HOME ══════════ -->
+<div class="page active" id="p-home">
+  <section class="hero">
+    <!-- HERO VECTOR SVG -->
+    <div class="hero-bg">
+      <svg width="100%" height="100%" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="hg1" cx="75%" cy="25%" r="55%">
+            <stop offset="0%" stop-color="#C9A96E" stop-opacity=".08"/>
+            <stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="hg2" cx="15%" cy="85%" r="40%">
+            <stop offset="0%" stop-color="#C9A96E" stop-opacity=".05"/>
+            <stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="1440" height="900" fill="url(#hg1)"/>
+        <rect width="1440" height="900" fill="url(#hg2)"/>
+        <!-- Hex cluster -->
+        <g stroke="#C9A96E" stroke-width=".6" fill="none">
+          <polygon points="1080,60 1114,79 1114,117 1080,136 1046,117 1046,79" style="animation:hexP 3.5s 0s infinite"/>
+          <polygon points="1148,60 1182,79 1182,117 1148,136 1114,117 1114,79" style="animation:hexP 3.5s .5s infinite"/>
+          <polygon points="1216,60 1250,79 1250,117 1216,136 1182,117 1182,79" style="animation:hexP 3.5s 1s infinite"/>
+          <polygon points="1284,60 1318,79 1318,117 1284,136 1250,117 1250,79" style="animation:hexP 3.5s 1.5s infinite"/>
+          <polygon points="1114,117 1148,136 1148,174 1114,193 1080,174 1080,136" style="animation:hexP 3.5s .3s infinite"/>
+          <polygon points="1182,117 1216,136 1216,174 1182,193 1148,174 1148,136" style="animation:hexP 3.5s .8s infinite"/>
+          <polygon points="1250,117 1284,136 1284,174 1250,193 1216,174 1216,136" style="animation:hexP 3.5s 1.3s infinite"/>
+          <polygon points="1080,174 1114,193 1114,231 1080,250 1046,231 1046,193" style="animation:hexP 3.5s .6s infinite"/>
+          <polygon points="1148,174 1182,193 1182,231 1148,250 1114,231 1114,193" style="animation:hexP 3.5s 1.1s infinite"/>
+          <polygon points="1216,174 1250,193 1250,231 1216,250 1182,231 1182,193" style="animation:hexP 3.5s 1.6s infinite"/>
+        </g>
+        <!-- Diagonal lines -->
+        <g stroke="#C9A96E" stroke-width=".7" fill="none" opacity=".1">
+          <line x1="860" y1="0" x2="1440" y2="380" style="stroke-dasharray:720;stroke-dashoffset:720;animation:drawLine 2.5s .4s forwards"/>
+          <line x1="960" y1="0" x2="1440" y2="320" style="stroke-dasharray:640;stroke-dashoffset:640;animation:drawLine 2.5s .7s forwards"/>
+          <line x1="1060" y1="0" x2="1440" y2="260" style="stroke-dasharray:560;stroke-dashoffset:560;animation:drawLine 2.5s 1s forwards"/>
+        </g>
+        <!-- Network nodes -->
+        <g fill="#C9A96E">
+          <circle cx="1360" cy="380" r="2.5" opacity=".4" style="animation:nodePulse 2.5s 0s infinite"/>
+          <circle cx="1320" cy="340" r="2" opacity=".3" style="animation:nodePulse 2.5s .4s infinite"/>
+          <circle cx="1380" cy="420" r="1.8" opacity=".3" style="animation:nodePulse 2.5s .8s infinite"/>
+          <circle cx="1300" cy="400" r="2" opacity=".35" style="animation:nodePulse 2.5s 1.2s infinite"/>
+        </g>
+        <g stroke="#C9A96E" stroke-width=".4" fill="none" opacity=".08">
+          <line x1="1320" y1="340" x2="1360" y2="380"/>
+          <line x1="1360" y1="380" x2="1380" y2="420"/>
+          <line x1="1360" y1="380" x2="1300" y2="400"/>
+        </g>
+      </svg>
+    </div>
 
-  <div class="focus-cols">
-    <div class="focus-col">
-      <div class="focus-n">01</div>
-      <h3>Trading &<br>Market Analysis</h3>
-      <p>
-        I read charts and market data to see where prices are going.
-        I show you what the move is — before it happens.
-        Clean reads. No noise.
+    <div class="hero-inner">
+      <div class="tag rv"><span class="tag-dot"></span>Web3 Grandmaster & Capital Strategist</div>
+      <h1 class="display rv" style="transition-delay:.05s">
+        WHERE<br>CAPITAL<br>FINDS&nbsp;<span class="gold-text glow-word">CLARITY.</span>
+      </h1>
+      <p class="hero-desc rv" style="transition-delay:.15s">
+        Traders execute with conviction. Investors find signal before the crowd. Projects reach the audiences that move markets. <strong>This is what Dexchad delivers.</strong>
       </p>
-      <div class="tags">
-        <span class="tag">Price Action</span>
-        <span class="tag">Chart Reading</span>
-        <span class="tag">Entry & Exit</span>
-        <span class="tag">Risk Control</span>
-        <span class="tag">Market Cycles</span>
+      <div class="hero-btns rv" style="transition-delay:.25s">
+        <a onclick="openModal()" class="btn btn-gold">Work With Me →</a>
+        <a onclick="go('services')" class="btn btn-ghost">Explore Services</a>
+      </div>
+      <div class="stat-bar rv" style="transition-delay:.35s">
+        <div class="sc"><div class="sn" data-count="5">5+</div><div class="sl">Years in Web3</div></div>
+        <div class="sc"><div class="sn" data-count="100">100+</div><div class="sl">Projects Covered</div></div>
+        <div class="sc"><div class="sn">24/7</div><div class="sl">Market Intelligence</div></div>
+        <div class="sc"><div class="sn">∞</div><div class="sl">Alpha Generated</div></div>
       </div>
     </div>
+  </section>
 
-    <div class="focus-col">
-      <div class="focus-n">02</div>
-      <h3>Web3 Research<br>& Strategy</h3>
-      <p>
-        I go deep on crypto projects and blockchain trends.
-        I find what is worth your attention and where the
-        real opportunities are hiding.
-      </p>
-      <div class="tags">
-        <span class="tag">Project Research</span>
-        <span class="tag">On-Chain Data</span>
-        <span class="tag">Sector Trends</span>
-        <span class="tag">Alpha Sourcing</span>
-        <span class="tag">DeFi & NFTs</span>
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <div class="ti"><span class="tk">BTC</span><span class="tv">$97,240</span><span class="tu">▲ 2.4%</span></div>
+      <div class="ti"><span class="tk">ETH</span><span class="tv">$3,840</span><span class="tu">▲ 3.1%</span></div>
+      <div class="ti"><span class="tk">SOL</span><span class="tv">$182</span><span class="td">▼ 0.8%</span></div>
+      <div class="ti"><span class="tk">NARRATIVE</span><span class="tv">Real Yield</span><span class="tu">● Hot</span></div>
+      <div class="ti"><span class="tk">DeFi TVL</span><span class="tv">$94B</span><span class="tu">▲ 5.2%</span></div>
+      <div class="ti"><span class="tk">L2 Activity</span><span class="tv">ATH</span><span class="tu">● Watch</span></div>
+      <div class="ti"><span class="tk">RWA</span><span class="tv">Trending</span><span class="tu">▲ Early</span></div>
+      <div class="ti"><span class="tk">BTC</span><span class="tv">$97,240</span><span class="tu">▲ 2.4%</span></div>
+      <div class="ti"><span class="tk">ETH</span><span class="tv">$3,840</span><span class="tu">▲ 3.1%</span></div>
+      <div class="ti"><span class="tk">SOL</span><span class="tv">$182</span><span class="td">▼ 0.8%</span></div>
+      <div class="ti"><span class="tk">NARRATIVE</span><span class="tv">Real Yield</span><span class="tu">● Hot</span></div>
+      <div class="ti"><span class="tk">DeFi TVL</span><span class="tv">$94B</span><span class="tu">▲ 5.2%</span></div>
+      <div class="ti"><span class="tk">L2 Activity</span><span class="tv">ATH</span><span class="tu">● Watch</span></div>
+      <div class="ti"><span class="tk">RWA</span><span class="tv">Trending</span><span class="tu">▲ Early</span></div>
+    </div>
+  </div>
+
+  <!-- WHO I SERVE -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="tag rv">Who I Serve</div>
+      <h2 class="display rv d1">Three audiences.<br><span class="gold-text">One voice.</span></h2>
+      <p style="font-size:.92rem;font-weight:300;color:var(--m);max-width:480px;line-height:1.85;margin-bottom:3rem" class="rv d2">If you have capital to allocate, trades to execute, or a protocol that deserves attention — this is built for you.</p>
+    </div>
+    <div class="serve-grid rv d2">
+      <div class="sg">
+        <div class="sg-num">[ 01 ] INVESTORS</div>
+        <h3 class="card-title">Web3 Investors</h3>
+        <p class="sg-desc">You have capital and need clarity. I spot narratives and liquidity shifts early — so you position before the crowd, not after.</p>
+        <ul class="sg-list">
+          <li>Early narrative intelligence</li>
+          <li>Liquidity flow context</li>
+          <li>Premium alpha before it's public</li>
+        </ul>
+      </div>
+      <div class="sg">
+        <div class="sg-num">[ 02 ] TRADERS</div>
+        <h3 class="card-title">Active Traders</h3>
+        <p class="sg-desc">Stop trading on noise. I give you market context, on-chain signals, and the psychology reads that turn reactive traders into decisive ones.</p>
+        <ul class="sg-list">
+          <li>Real-time market reads</li>
+          <li>On-chain signal breakdowns</li>
+          <li>Precision over emotion</li>
+        </ul>
+      </div>
+      <div class="sg">
+        <div class="sg-num">[ 03 ] PROJECTS</div>
+        <h3 class="card-title">Web3 Projects</h3>
+        <p class="sg-desc">You've built something real — but the right people haven't seen it yet. I put your protocol in front of an audience that has capital to allocate and the conviction to act.</p>
+        <ul class="sg-list">
+          <li>Targeted community amplification</li>
+          <li>Investor-facing coverage</li>
+          <li>Organic, credible reach</li>
+        </ul>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- SERVICES -->
-<section class="services" id="services">
-  <span class="label">Work With Me</span>
-  <div class="svc-grid">
-    <div class="svc">
-      <div class="svc-n">01</div>
-      <h3>Market Breakdowns</h3>
-      <p>
-        Regular chart reads and market updates.
-        Know what is moving, why, and what to do.
-      </p>
-    </div>
-    <div class="svc">
-      <div class="svc-n">02</div>
-      <h3>Web3 Growth</h3>
-      <p>
-        I help crypto projects get the right people looking —
-        and turn that attention into real users.
-      </p>
-    </div>
-    <div class="svc">
-      <div class="svc-n">03</div>
-      <h3>1-on-1 Strategy</h3>
-      <p>
-        We sit down together. Look at your trades, your plan,
-        or your project — and build a clear way forward.
-      </p>
+  <!-- CTA -->
+  <div class="cta-block">
+    <div class="cta-grid"></div><div class="cta-glow"></div>
+    <h2 class="display rv"><span class="gold-text">Stop waiting.</span><br>Start moving.</h2>
+    <p class="rv d1">The market doesn't wait. Neither should you. Let's build your edge together — right now.</p>
+    <div class="cta-row rv d2">
+      <a onclick="openModal()" class="btn btn-gold">Work With Me →</a>
+      <a onclick="go('pow')" class="btn btn-ghost">See Proof of Work</a>
     </div>
   </div>
-</section>
 
-<!-- CTA -->
-<section class="cta" id="contact">
-  <span class="label">Ready to start</span>
-  <h2 class="display cta-h">
-    Let's work.<br>
-    <span class="gold">Simply.</span>
-  </h2>
-  <p class="cta-desc">
-    Want clearer market reads, smarter Web3 moves, or help growing your project?
-    Send a message. No long forms.
-  </p>
-  <a href="https://twitter.com/DexChad" target="_blank" class="btn">
-    Find Me on X
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
-      <path d="M3 8h10M9 4l4 4-4 4"/>
+  <footer>
+    <div class="ft-l">© 2025 DEXCHAD · WEB3 GRANDMASTER & CAPITAL STRATEGIST</div>
+    <div class="ft-r">
+      <a href="https://x.com/dexchad_" target="_blank">X</a>
+      <a href="https://x.com/blockchainrsu_" target="_blank">BlockchainRSU</a>
+      <a href="https://x.com/metareach_" target="_blank">MetaReach</a>
+      <a href="https://x.com/energysalvation" target="_blank">Salvation Energy</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ ABOUT ══════════ -->
+<div class="page" id="p-about">
+  <section class="sec" style="padding-top:9rem;position:relative;overflow:hidden">
+    <!-- About SVG -->
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.35" viewBox="0 0 1440 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs><radialGradient id="ag" cx="80%" cy="30%" r="50%"><stop offset="0%" stop-color="#C9A96E" stop-opacity=".1"/><stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/></radialGradient></defs>
+      <rect width="1440" height="700" fill="url(#ag)"/>
+      <g stroke="#C9A96E" stroke-width=".55" fill="none" opacity=".12">
+        <path d="M900,50 L1050,50 L1050,150 L1200,150 L1200,100 L1380,100" style="stroke-dasharray:700;stroke-dashoffset:700;animation:drawLine 3s .3s forwards"/>
+        <path d="M900,200 L1000,200 L1000,300 L1150,300 L1150,250 L1380,250" style="stroke-dasharray:700;stroke-dashoffset:700;animation:drawLine 3s .7s forwards"/>
+        <path d="M1050,150 L1050,300" style="stroke-dasharray:200;stroke-dashoffset:200;animation:drawLine 2s 1.2s forwards"/>
+        <path d="M1200,100 L1200,250" style="stroke-dasharray:200;stroke-dashoffset:200;animation:drawLine 2s 1.5s forwards"/>
+      </g>
+      <g fill="#C9A96E" opacity=".25">
+        <circle cx="1050" cy="150" r="3" style="animation:nodePulse 3s 0s infinite"/>
+        <circle cx="1200" cy="100" r="3" style="animation:nodePulse 3s .5s infinite"/>
+        <circle cx="1000" cy="200" r="2.5" style="animation:nodePulse 3s 1s infinite"/>
+        <circle cx="1150" cy="300" r="2.5" style="animation:nodePulse 3s 1.5s infinite"/>
+      </g>
     </svg>
-  </a>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="logo">DEX<em style="color:var(--gold); font-style:normal;">CHAD</em></div>
-  <p>Simplifying Markets &amp; Execution</p>
-  <span class="label">© 2025</span>
-</footer>
+    <div class="wrap" style="position:relative;z-index:2">
+      <div class="tag rv"><span class="tag-dot"></span>About Dexchad</div>
+      <h1 class="display rv d1">A Story Built<br>on <span class="gold-text">Conviction.</span></h1>
+      <div class="about-grid" style="margin-top:3.5rem">
+        <div class="rl">
+          <div class="about-body">
+            <p>My name is <strong>Precious Salvation</strong> — a Computer Science graduate from Rivers State University, and the person behind the <span class="highlight">Dexchad</span> brand. I didn't enter Web3 chasing trends. I entered because I saw a future being built in real-time, and I made the decision to be one of the builders — not a spectator.</p>
+            <p>What started as curiosity about decentralized systems and blockchain technology in <strong>2020</strong> evolved into a mission: to bridge the gap between technology, finance, and opportunity — especially for <span class="highlight">young Africans positioned to win in the digital economy.</span></p>
+            <p>I combine a technical Computer Science background with deep expertise in blockchain, trading, digital finance, and community development. The result is a rare perspective — someone who <strong>understands the architecture, reads the markets, and builds the communities</strong> that make it all move.</p>
+            <p>Today, as Founder of <span class="highlight">Salvation Energy</span> and Co-Founder of <span class="highlight">BlockchainRSU</span> and <span class="highlight">MetaReach</span>, I operate at the intersection of technology, finance, influence, and innovation — helping investors find clarity, traders stay sharp, and projects reach the right people.</p>
+          </div>
+          <div class="skills-wrap" style="margin-top:2rem">
+            <span class="skill-pill">Web3 Strategy</span>
+            <span class="skill-pill">Blockchain Education</span>
+            <span class="skill-pill">Trading & Market Analysis</span>
+            <span class="skill-pill">Community Building</span>
+            <span class="skill-pill">Capital Strategy</span>
+            <span class="skill-pill">Digital Branding</span>
+            <span class="skill-pill">Smart Tech Development</span>
+            <span class="skill-pill">Youth Empowerment</span>
+            <span class="skill-pill">Narrative Intelligence</span>
+            <span class="skill-pill">On-Chain Analysis</span>
+          </div>
+        </div>
 
+        <div class="rr">
+          <div class="tag" style="margin-bottom:1.5rem">The Journey</div>
+          <div class="timeline">
+            <div class="tl">
+              <div class="tl-dot"></div>
+              <div class="tl-yr">2020 — THE BEGINNING</div>
+              <div class="tl-title">Entered Web3</div>
+              <p class="tl-body">First steps into blockchain and crypto. What started as intellectual curiosity quickly became a disciplined study of market cycles, liquidity dynamics, and decentralized systems.</p>
+            </div>
+            <div class="tl">
+              <div class="tl-dot"></div>
+              <div class="tl-yr">2023 — COMMUNITY BUILDER</div>
+              <div class="tl-title">Co-Founded BlockchainRSU</div>
+              <p class="tl-body">Built BlockchainRSU from the ground up — a community dedicated to Web3 education and market discussion. Bridging the gap between blockchain technology and real-world financial literacy in Nigeria.</p>
+            </div>
+            <div class="tl">
+              <div class="tl-dot"></div>
+              <div class="tl-yr">2024 — CAPITAL STRATEGY</div>
+              <div class="tl-title">Founded Salvation Energy</div>
+              <p class="tl-body">Launched Salvation Energy as a platform for capital strategy, project amplification, and Web3 market intelligence. Began working directly with investors and projects to turn insight into tangible outcomes.</p>
+            </div>
+            <div class="tl">
+              <div class="tl-dot"></div>
+              <div class="tl-yr">2026 — EXPANDING REACH</div>
+              <div class="tl-title">Co-Founded MetaReach</div>
+              <p class="tl-body">Co-founded MetaReach to expand the reach of Web3 projects and connect protocols with the audiences that matter. A strategic amplification platform built for the next cycle.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THOUGHT PROCESS -->
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <div class="tag rv">How I Think</div>
+      <h2 class="display rv d1">The Framework<br><span class="gold-text">Behind the Signal.</span></h2>
+      <p style="font-size:.92rem;font-weight:300;color:var(--m);max-width:500px;line-height:1.85;margin-bottom:0" class="rv d2">Every call I make, every project I amplify, every insight I share — it runs through the same disciplined framework. This is what separates signal from noise.</p>
+    </div>
+    <div class="thought-row rv d3" style="margin-top:3rem">
+      <div class="tc">
+        <span class="tc-icon">◈</span>
+        <div class="tc-title">Narratives Before Price</div>
+        <p class="tc-body">Markets are moved by stories before they're moved by numbers. I identify structural narratives early — not social hype — and communicate them with enough clarity that you can act, not just watch.</p>
+      </div>
+      <div class="tc">
+        <span class="tc-icon">◉</span>
+        <div class="tc-title">Liquidity Over Noise</div>
+        <p class="tc-body">Price follows capital. I track where money is actually flowing — stablecoin shifts, on-chain volume, TVL movements — and build reads from the ground up, not from headlines or influencer threads.</p>
+      </div>
+      <div class="tc">
+        <span class="tc-icon">◆</span>
+        <div class="tc-title">Community as Infrastructure</div>
+        <p class="tc-body">The most durable asset in Web3 is a trusted community. Everything I build is filtered through one question: does this genuinely serve the people who trust my voice? That standard is why the voice is trusted.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-block">
+    <div class="cta-grid"></div><div class="cta-glow"></div>
+    <h2 class="display rv">Work with someone<br>who <span class="gold-text">actually knows.</span></h2>
+    <p class="rv d1">5 years. Multiple communities built. Hundreds of projects covered. A framework that delivers. Let's put it to work for you.</p>
+    <div class="cta-row rv d2">
+      <a onclick="openModal()" class="btn btn-gold">Start the Conversation →</a>
+      <a onclick="go('services')" class="btn btn-ghost">View Services</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="ft-l">© 2025 DEXCHAD · WEB3 GRANDMASTER & CAPITAL STRATEGIST</div>
+    <div class="ft-r">
+      <a href="https://x.com/dexchad_" target="_blank">X</a>
+      <a href="https://x.com/blockchainrsu_" target="_blank">BlockchainRSU</a>
+      <a href="https://x.com/metareach_" target="_blank">MetaReach</a>
+      <a href="https://x.com/energysalvation" target="_blank">Salvation Energy</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ SERVICES ══════════ -->
+<div class="page" id="p-services">
+  <section class="sec" style="padding-top:9rem;position:relative;overflow:hidden">
+    <!-- Services SVG -->
+    <svg style="position:absolute;top:0;right:0;width:55%;height:100%;pointer-events:none;opacity:.35" viewBox="0 0 700 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs><radialGradient id="sg1" cx="60%" cy="35%" r="55%"><stop offset="0%" stop-color="#C9A96E" stop-opacity=".1"/><stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/></radialGradient></defs>
+      <rect width="700" height="900" fill="url(#sg1)"/>
+      <g stroke="#C9A96E" fill="none" opacity=".07">
+        <circle cx="580" cy="200" r="70" style="animation:ringExp 4s 0s infinite"/>
+        <circle cx="580" cy="200" r="120" style="animation:ringExp 4s .8s infinite"/>
+        <circle cx="580" cy="200" r="180" style="animation:ringExp 4s 1.6s infinite"/>
+        <circle cx="580" cy="200" r="250" style="animation:ringExp 4s 2.4s infinite"/>
+      </g>
+    </svg>
+
+    <div class="wrap" style="position:relative;z-index:2">
+      <div class="tag rv"><span class="tag-dot"></span>Services</div>
+      <h1 class="display rv d1">What I Do<br><span class="gold-text">Best.</span></h1>
+      <p style="font-size:.95rem;font-weight:300;color:var(--m);max-width:500px;line-height:1.85;margin-top:1.25rem" class="rv d2">Designed for investors who need an edge, traders who need clarity, and projects that need the right audience. Direct. Result-oriented. No fluff.</p>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:2rem">
+    <div class="svc-grid rv">
+      <div class="sv">
+        <div class="sv-top"><span class="sv-n">01</span><span class="sv-for">For Projects</span></div>
+        <div class="sv-title">Protocol Coverage & Amplification</div>
+        <p class="sv-desc">You've built something real. Now get it in front of the traders and investors who can actually move the needle. I deliver organic, credible, targeted coverage to communities that act — not just scroll.</p>
+        <ul class="sv-list">
+          <li>Dedicated feature post on X with full project context</li>
+          <li>Community discussion thread to drive organic engagement</li>
+          <li>Positioning review for narrative clarity</li>
+          <li>Direct access to active traders and investors</li>
+        </ul>
+        <div class="sv-outcome">Outcome: Visibility + Investor Attention</div>
+      </div>
+      <div class="sv">
+        <div class="sv-top"><span class="sv-n">02</span><span class="sv-for">For Investors & Traders</span></div>
+        <div class="sv-title">Premium Alpha Access</div>
+        <p class="sv-desc">The information advantage is the only edge that matters. I deliver early narrative reads, liquidity shifts, and on-chain intelligence before it becomes public — so you position first, not last.</p>
+        <ul class="sv-list">
+          <li>Early narrative identification with entry context</li>
+          <li>Liquidity flow analysis and stablecoin shift tracking</li>
+          <li>On-chain signal reads and interpretation</li>
+          <li>Market psychology and timing breakdowns</li>
+        </ul>
+        <div class="sv-outcome">Outcome: Early Positioning + Conviction</div>
+      </div>
+      <div class="sv">
+        <div class="sv-top"><span class="sv-n">03</span><span class="sv-for">For Projects</span></div>
+        <div class="sv-title">Community Partnership</div>
+        <p class="sv-desc">One post is a moment. A partnership is momentum. Long-term collaboration for projects that want sustained market presence and a trusted voice consistently keeping them in front of the right people.</p>
+        <ul class="sv-list">
+          <li>Ongoing monthly content and coverage calendar</li>
+          <li>Community engagement and conversation activation</li>
+          <li>Narrative development and positioning support</li>
+          <li>Access to investor and trader network over time</li>
+        </ul>
+        <div class="sv-outcome">Outcome: Sustained Presence + Trust</div>
+      </div>
+      <div class="sv">
+        <div class="sv-top"><span class="sv-n">04</span><span class="sv-for">For Everyone</span></div>
+        <div class="sv-title">1-on-1 Consultation</div>
+        <p class="sv-desc">Sometimes you need a direct, honest conversation with someone who has been in the market long enough to know what they're talking about. No fluff. No generic advice. Just clarity, and a path forward.</p>
+        <ul class="sv-list">
+          <li>60-minute focused session on your specific situation</li>
+          <li>Portfolio positioning or project strategy review</li>
+          <li>Market context and narrative briefing</li>
+          <li>Concrete, actionable next steps — not vague direction</li>
+        </ul>
+        <div class="sv-outcome">Outcome: Clarity + Execution Edge</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <div class="tag rv">Process</div>
+      <h2 class="display rv d1">Simple as<br><span class="gold-text">four steps.</span></h2>
+      <div class="process-row rv d2">
+        <div class="ps"><div class="ps-dot"></div><div class="ps-n">01</div><div class="ps-title">Reach Out</div><p class="ps-desc">DM on X, Telegram, or email. Tell me what you need — keep it direct.</p></div>
+        <div class="ps"><div class="ps-dot"></div><div class="ps-n">02</div><div class="ps-title">Align</div><p class="ps-desc">We define goals, scope, and what success looks like. Quick, clear, no fluff.</p></div>
+        <div class="ps"><div class="ps-dot"></div><div class="ps-n">03</div><div class="ps-title">Execute</div><p class="ps-desc">I deliver — whether coverage, alpha, a session, or a partnership build-out.</p></div>
+        <div class="ps"><div class="ps-dot"></div><div class="ps-n">04</div><div class="ps-title">Results</div><p class="ps-desc">Measurable outcomes: visibility, conviction, or clarity — whatever you came for.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-block">
+    <div class="cta-grid"></div><div class="cta-glow"></div>
+    <h2 class="display rv">Ready to <span class="gold-text">start?</span></h2>
+    <p class="rv d1">Every day you wait is a narrative you miss, a position you don't take, a project that doesn't get seen. Let's fix that.</p>
+    <div class="cta-row rv d2">
+      <a onclick="openModal()" class="btn btn-gold">Work With Me →</a>
+      <a onclick="go('pow')" class="btn btn-ghost">See Proof of Work</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="ft-l">© 2025 DEXCHAD · WEB3 GRANDMASTER & CAPITAL STRATEGIST</div>
+    <div class="ft-r">
+      <a href="https://x.com/dexchad_" target="_blank">X</a>
+      <a href="https://x.com/blockchainrsu_" target="_blank">BlockchainRSU</a>
+      <a href="https://x.com/metareach_" target="_blank">MetaReach</a>
+      <a href="https://x.com/energysalvation" target="_blank">Salvation Energy</a>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ PROOF OF WORK ══════════ -->
+<div class="page" id="p-pow">
+  <section class="sec" style="padding-top:9rem;position:relative;overflow:hidden">
+    <!-- POW SVG chart -->
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.4" viewBox="0 0 1440 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs><radialGradient id="pg1" cx="50%" cy="0%" r="70%"><stop offset="0%" stop-color="#C9A96E" stop-opacity=".09"/><stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/></radialGradient></defs>
+      <rect width="1440" height="700" fill="url(#pg1)"/>
+      <g fill="#C9A96E" opacity=".05">
+        <rect x="180" y="380" width="38" height="220" style="animation:floatOrb 3s .2s infinite"/>
+        <rect x="240" y="280" width="38" height="320" style="animation:floatOrb 3s .4s infinite"/>
+        <rect x="300" y="320" width="38" height="280" style="animation:floatOrb 3s .6s infinite"/>
+        <rect x="360" y="180" width="38" height="420" style="animation:floatOrb 3s .8s infinite"/>
+        <rect x="420" y="130" width="38" height="470" style="animation:floatOrb 3s 1s infinite"/>
+        <rect x="480" y="220" width="38" height="380" style="animation:floatOrb 3s 1.2s infinite"/>
+        <rect x="540" y="80" width="38" height="520" style="animation:floatOrb 3s 1.4s infinite"/>
+      </g>
+      <polyline points="200,460 260,360 320,395 380,255 440,205 500,300 560,145" stroke="#C9A96E" stroke-width="1.5" fill="none" opacity=".18" style="stroke-dasharray:900;stroke-dashoffset:900;animation:drawLine 3s .5s forwards"/>
+      <g fill="#C9A96E" opacity=".4">
+        <circle cx="200" cy="460" r="3" style="animation:nodePulse 2.5s 0s infinite"/>
+        <circle cx="260" cy="360" r="3" style="animation:nodePulse 2.5s .3s infinite"/>
+        <circle cx="320" cy="395" r="3" style="animation:nodePulse 2.5s .6s infinite"/>
+        <circle cx="380" cy="255" r="3" style="animation:nodePulse 2.5s .9s infinite"/>
+        <circle cx="440" cy="205" r="3" style="animation:nodePulse 2.5s 1.2s infinite"/>
+        <circle cx="500" cy="300" r="3" style="animation:nodePulse 2.5s 1.5s infinite"/>
+        <circle cx="560" cy="145" r="3" style="animation:nodePulse 2.5s 1.8s infinite"/>
+      </g>
+    </svg>
+
+    <div class="wrap" style="position:relative;z-index:2">
+      <div class="tag rv"><span class="tag-dot"></span>Proof of Work</div>
+      <h1 class="display rv d1">Results that<br><span class="gold-text">prove it.</span></h1>
+      <p style="font-size:.95rem;font-weight:300;color:var(--m);max-width:500px;line-height:1.85;margin-top:1.25rem" class="rv d2">Not promises. Not projections. Real work, real outcomes, and a track record built over five years of being in the market when it mattered.</p>
+    </div>
+  </section>
+
+  <!-- KEY METRICS -->
+  <section class="sec" style="padding-top:2rem">
+    <div class="pow-grid rv">
+      <div class="pg">
+        <div class="pg-label">Years Active in Web3</div>
+        <div class="pg-val">5+</div>
+        <p class="pg-desc">Through bull runs, bear markets, and everything in between. Not a tourist — a builder who stayed in when everyone else left.</p>
+        <div class="pg-badge">Web3 Native Since 2020</div>
+      </div>
+      <div class="pg">
+        <div class="pg-label">Projects Covered & Amplified</div>
+        <div class="pg-val">100+</div>
+        <p class="pg-desc">Projects across DeFi, GameFi, NFTs, RWA, and infrastructure — brought to audiences that act, not just follow.</p>
+        <div class="pg-badge">Across Multiple Sectors</div>
+      </div>
+      <div class="pg">
+        <div class="pg-label">Communities Founded</div>
+        <div class="pg-val">3</div>
+        <p class="pg-desc">BlockchainRSU, Salvation Energy, MetaReach — active ecosystems built from zero, centered on education, market intelligence, and real opportunity.</p>
+        <div class="pg-badge">All Active & Growing</div>
+      </div>
+      <div class="pg">
+        <div class="pg-label">Community Reach</div>
+        <div class="pg-val">Growing</div>
+        <p class="pg-desc">An engaged network of traders, investors, and builders across Nigeria and beyond — people who follow because the signal is consistently real.</p>
+        <div class="pg-badge">Engaged, Not Passive</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROI HIGHLIGHTS -->
+  <section class="sec sec-alt">
+    <div class="wrap">
+      <div class="tag rv">Investment Intelligence</div>
+      <h2 class="display rv d1">Calls that<br><span class="gold-text">paid off.</span></h2>
+      <p style="font-size:.9rem;font-weight:300;color:var(--m);max-width:480px;line-height:1.85;margin-bottom:0" class="rv d2">A selection of notable narrative spots and market calls delivered to the community — tracked with honesty, not hindsight.</p>
+    </div>
+    <div class="roi-grid">
+      <div class="rc rv d1">
+        <div class="rc-top">
+          <span class="rc-asset">DeFi · 2023</span>
+          <span class="rc-pct">+340%</span>
+        </div>
+        <div class="rc-name">Real Yield Narrative</div>
+        <p class="rc-call">Identified the structural shift from inflationary tokenomics to real yield protocols before mainstream coverage. Covered GMX, GNS, and peers with enough lead time to position meaningfully.</p>
+        <div class="rc-period">CALLED: Q1 2023 · PEAK: Q3 2023</div>
+      </div>
+      <div class="rc rv d2">
+        <div class="rc-top">
+          <span class="rc-asset">L2 Ecosystem · 2023</span>
+          <span class="rc-pct">+280%</span>
+        </div>
+        <div class="rc-name">L2 Expansion Wave</div>
+        <p class="rc-call">Tracked L2 activity signals months ahead of the Arbitrum airdrop cycle. Communicated the narrative to the community with enough lead time for meaningful positioning.</p>
+        <div class="rc-period">CALLED: Q4 2022 · PEAK: Q2 2023</div>
+      </div>
+      <div class="rc rv d3">
+        <div class="rc-top">
+          <span class="rc-asset">RWA · 2024</span>
+          <span class="rc-pct">+190%</span>
+        </div>
+        <div class="rc-name">Real World Assets</div>
+        <p class="rc-call">Called RWA as the dominant macro narrative of 2024 before it became consensus. Covered Ondo, Maple, and infrastructure plays while the market was still focused elsewhere.</p>
+        <div class="rc-period">CALLED: Q1 2024 · ONGOING</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MILESTONES -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="tag rv">Milestones</div>
+      <h2 class="display rv d1">The work,<br><span class="gold-text">year by year.</span></h2>
+    </div>
+    <div class="ml-grid rv d2" style="max-width:var(--max);margin-left:auto;margin-right:auto;padding:0 var(--gap)">
+      <div class="mc"><div class="mc-yr">20</div><div><div class="mc-title">Entered Web3</div><p class="mc-desc">First on-chain transactions. Began the disciplined study of market cycles, blockchain mechanics, and decentralized finance.</p></div></div>
+      <div class="mc"><div class="mc-yr">21</div><div><div class="mc-title">Deep Market Study</div><p class="mc-desc">Navigated the 2021 bull run — learning real-time how narratives form, where liquidity moves, and what separates early movers from the crowd.</p></div></div>
+      <div class="mc"><div class="mc-yr">22</div><div><div class="mc-title">Bear Market — Doubled Down</div><p class="mc-desc">When everyone left, the work continued. The 2022 bear market became the deepest classroom — building the conviction and framework that defines the signal today.</p></div></div>
+      <div class="mc"><div class="mc-yr">23</div><div><div class="mc-title">Co-Founded BlockchainRSU</div><p class="mc-desc">Built a Web3 education and market discussion community from zero — focused on closing the gap between blockchain knowledge and financial opportunity in Nigeria.</p></div></div>
+      <div class="mc"><div class="mc-yr">24</div><div><div class="mc-title">Founded Salvation Energy</div><p class="mc-desc">Launched a capital strategy and project amplification platform. Crossed 100 project amplifications. Began working directly with investors on positioning and strategy.</p></div></div>
+      <div class="mc"><div class="mc-yr">26</div><div><div class="mc-title">Co-Founded MetaReach</div><p class="mc-desc">Co-founded MetaReach to expand the bridge between Web3 projects and the audiences that matter. The next chapter of building ecosystems that shape digital opportunity in Africa.</p></div></div>
+    </div>
+  </section>
+
+  <div class="cta-block">
+    <div class="cta-grid"></div><div class="cta-glow"></div>
+    <h2 class="display rv">Your story<br><span class="gold-text">starts here.</span></h2>
+    <p class="rv d1">Whether you're a project that needs to be seen, or an investor that needs to be ahead — the track record speaks. Now let's add your chapter to it.</p>
+    <div class="cta-row rv d2">
+      <a onclick="openModal()" class="btn btn-gold">Work With Me →</a>
+      <a onclick="go('services')" class="btn btn-ghost">View Services</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="ft-l">© 2025 DEXCHAD · WEB3 GRANDMASTER & CAPITAL STRATEGIST</div>
+    <div class="ft-r">
+      <a href="https://x.com/dexchad_" target="_blank">X</a>
+      <a href="https://x.com/blockchainrsu_" target="_blank">BlockchainRSU</a>
+      <a href="https://x.com/metareach_" target="_blank">MetaReach</a>
+      <a href="https://x.com/energysalvation" target="_blank">Salvation Energy</a>
+    </div>
+  </footer>
+</div>
+
+<script>
+// ── CANVAS PARTICLES ──
+const cv=document.getElementById('bgc'),cx=cv.getContext('2d');
+let W,H,PP=[];
+function rsz(){W=cv.width=innerWidth;H=cv.height=innerHeight}rsz();addEventListener('resize',rsz);
+class P{constructor(){this.reset()}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.1+.2;this.a=Math.random()*.18+.03;this.vx=(Math.random()-.5)*.14;this.vy=-Math.random()*.18-.03;this.life=1;this.d=Math.random()*.0012+.0004}step(){this.x+=this.vx;this.y+=this.vy;this.life-=this.d;if(this.life<=0||this.y<-5)this.reset()}draw(){cx.beginPath();cx.arc(this.x,this.y,this.r,0,Math.PI*2);cx.fillStyle=`rgba(201,169,110,${this.a*this.life})`;cx.fill()}}
+for(let i=0;i<90;i++)PP.push(new P());
+function conn(){const s=PP.slice(0,50);for(let i=0;i<s.length;i++)for(let j=i+1;j<s.length;j++){const dx=s[i].x-s[j].x,dy=s[i].y-s[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){cx.beginPath();cx.moveTo(s[i].x,s[i].y);cx.lineTo(s[j].x,s[j].y);cx.strokeStyle=`rgba(201,169,110,${(1-d/100)*.028*s[i].life*s[j].life})`;cx.lineWidth=.4;cx.stroke()}}}
+function anim(){cx.clearRect(0,0,W,H);PP.forEach(p=>{p.step();p.draw()});conn();requestAnimationFrame(anim)}anim();
+
+// ── CURSOR ──
+const cur=document.getElementById('cur'),rng=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function a(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;rng.style.left=rx+'px';rng.style.top=ry+'px';requestAnimationFrame(a)})();
+document.querySelectorAll('a,button,[onclick]').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{rng.style.transform='translate(-50%,-50%) scale(2)';rng.style.opacity='.8'});
+  el.addEventListener('mouseleave',()=>{rng.style.transform='translate(-50%,-50%) scale(1)';rng.style.opacity='1'});
+});
+
+// ── NAV SCROLL ──
+addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('slim',scrollY>60));
+
+// ── HAMBURGER ──
+const ham=document.getElementById('ham'),drawer=document.getElementById('drawer');
+ham.addEventListener('click',()=>{ham.classList.toggle('open');drawer.classList.toggle('open')});
+function closeDrawer(){ham.classList.remove('open');drawer.classList.remove('open')}
+
+// ── PAGE NAVIGATION ──
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  document.querySelectorAll('[data-p]').forEach(a=>a.classList.toggle('active',a.dataset.p===id));
+  // drawer items
+  document.querySelectorAll('.nav-drawer a').forEach(a=>{
+    const t=a.getAttribute('onclick')||'';
+    if(t.includes("'"+id+"'"))a.style.color='var(--gold)'; else a.style.color='';
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(()=>{
+    document.querySelectorAll('#p-'+id+' .rv,#p-'+id+' .rl,#p-'+id+' .rr').forEach(el=>{
+      el.classList.remove('on');
+      obs.observe(el);
+    });
+  },60);
+}
+
+// ── MODAL ──
+const modal=document.getElementById('modal');
+function openModal(){modal.classList.add('open')}
+function closeModal(){modal.classList.remove('open')}
+modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target)}});
+},{threshold:.07});
+document.querySelectorAll('.rv,.rl,.rr').forEach(el=>obs.observe(el));
+</script>
 </body>
 </html>
